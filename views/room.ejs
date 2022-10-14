@@ -55,7 +55,7 @@
     </form>
     <h2 id="room"></h2>
     <h1>Online Player</h1>
-    <table class="table">
+    <table id="tbl" class="table">
         <thead>
             <tr>
                 <th scope="col">First name</th>
@@ -78,7 +78,7 @@
         var socket = io('/admin');
         //  var message = document.getElementById("message");
         const room = "Live Users";
-
+        var somerow = document.getElementById("somerow");
         var name = document.getElementById("fname").value;
         var email = document.getElementById("email").value;
 
@@ -100,43 +100,30 @@
                 client_email: email,
             };
             console.log(user_details)
-            socket.emit('data', user_details);
+            socket.emit('new_visitor', user_details);
         })
-
-        // socket.on('userInfo', (data) => {
-        //     console.log(data);
-        //     var Row = document.getElementById("somerow");
-        //     var Cells = Row.getElementsByTagName("td");
-        //     Cells[0].innerText = data.name;
-        //     Cells[1].innerText = data.email;
-        //     Cells[2].innerText = socket.id;
-        // })
 
 
         socket.on('userInfo', (data) => {
             console.log(data);
-            const tbl = document.createElement("table");
-            const tblBody = document.createElement("tbody");
+             var tr = document.createElement("tr");         
+             var td1 = tr.appendChild(document.createElement("td"));
+             var td2 = tr.appendChild(document.createElement("td"));
+             var td3 = tr.appendChild(document.createElement("td"));
+            // const cellText = document.createTextNode();
 
-            const row = document.createElement("tr");
-            const cell = document.createElement("td");
-            let markup = `${data.name}- ${data.email}- ${data.socketId}`
-            li.textContent = markup;
-            message.append(li);
+            td1.innerHTML=data.name
+            td2.innerHTML=data.email
+            td3.innerHTML=data.socketId
+
+            document.getElementById("tbl").appendChild(tr);
+            
+        })
 
 
-            const cellText = document.createTextNode(`cell in row ${tr}, column ${data.name}`);
-            cell.appendChild(cellText);
-            row.appendChild(cell);
+        socket.on('visitors', (visitors) => {
 
 
-            // add the row to the end of the table body
-            tblBody.appendChild(row);
-
-            // put the <tbody> in the <table>
-            tbl.appendChild(tblBody);
-            // appends <table> into <body>
-            document.body.appendChild(tbl);
         })
 
     </script>
