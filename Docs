@@ -1,0 +1,17 @@
+1. create a html form (form.html)
+2.create a node js file (index.js)
+	(a) require express,fs,ejs,path,body-parser
+	 b) using app.use(express.json());  // recognize the incoming Request object as a JSON object
+	(c) conect connetion file and schema file
+	(d) using app.get method and add form .html file
+	(e) using app.post method get all data from form and save on mongo{
+		-insert our req.body data in datainfo variable
+		-save data through await datainfo.save();		
+	}	
+	(f) using get and view all mongo data on our web page using ejs file{
+		res.render('ejs filename','send data on ejs file') ->send data on ejs file 
+}
+	(g) app.listen ->start server on port 
+
+3.conn.js file in all connection code with mongodb
+4. schema.js file in set schema of json and create a collection and export collection
