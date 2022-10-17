@@ -12,7 +12,7 @@
               },
               email: {
                 type: String,
-               // unique: true,
+                unique: true,
                 required: true
               },
               street: {
@@ -45,22 +45,8 @@
               }
             })
 
-            const OnlineUserSchema = new mongoose.Schema({
-              name: {
-                type: String,
-              },
-              emailId: {
-                type: String,
-                // unique: true,
-               // required: true
-              },
-              socketId:{
-                type: String,
-              }
-            })
-
+          
             const UserData = new mongoose.model("UserData", UserSchema);  //collection 
-            const OnlineUser = new mongoose.model("OnlineUser", OnlineUserSchema);  //collection 
 
 
-            module.exports = {UserData, OnlineUser};  
+            module.exports = {UserData};  

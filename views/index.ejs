@@ -7,7 +7,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
     integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <title>View</title>
+  <title>Show Details</title>
+  <style>
+    .has-details {
+      position: relative;
+    }
+
+    .details {
+      position: absolute;
+      top: 0;
+      transform: translateY(70%) scale(0);
+      transition: transform 0.1s ease-in;
+      transform-origin: left;
+      display: inline;
+      background: white;
+      z-index: 20;
+      min-width: 100%;
+      padding: 1rem;
+      border: 1px solid black;
+    }
+
+    .has-details:hover span {
+      transform: translateY(70%) scale(1);
+    }
+
+    td {
+      padding: 1rem;
+      background: whitesmoke;
+      border: 1px solid black;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+  </style>
 </head>
 
 <body>
@@ -15,7 +48,7 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">#</th>
+        <!-- <th scope="col">#</th> -->
         <th scope="col">First name</th>
         <th scope="col">Last name</th>
         <th scope="col">Mobile no</th>
@@ -25,35 +58,33 @@
       </tr>
     </thead>
     <tbody>
-      <%var i=1%>
-        <%dataList.forEach(result=>{%>
-          <tr>
-            <th scope="row">
-              <%=i++%>
-            </th>
-            <td>
-              <%=result.first_name%>
-            </td>
-            <td>
-              <%=result.last_name%>
-            </td>
-            <td>
-              <%=result.phone_no%>
-            </td>
-            <td>
-              <%=result.email%>
-            </td>
-            <td>
-              <%=result.street%>
+      <!-- <%var i=1%> -->
+      <%dataList.forEach(result=>{%>
+        <tr>
+        
+          <td>
+            <%=result.first_name%>
+          </td>
+          <td>
+            <%=result.last_name%>
+          </td>
+          <td>
+            <%=result.phone_no%>
+          </td>
+          <td>
+            <%=result.email%>
+          </td>
+          <td>
+            <%=result.street%>
               <%=result.city%>
-              <%=result.state%>
-              <%=result.country%>
-            </td>
-            <td>
-              <%=result.login_id%>
-            </td>
-          </tr>
-          <% })%>
+                <%=result.state%>
+                  <%=result.country%>
+          </td>
+          <td>
+            <%=result.login_id%>
+          </td>
+        </tr>
+        <% })%>
 
 
     </tbody>

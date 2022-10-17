@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Room1</title>
+    <title>Live User</title>
 </head>
 
 
@@ -63,68 +63,91 @@
                 <th scope="col">Socket Id</th>
             </tr>
         </thead>
-        <tbody>
-            <tr id="somerow">
-                <td> </td>
-                <td> <a href="/showdata"></a> </td>
-                <td> </td>
-            </tr>
-        </tbody>
+        <tbody></tbody>
     </table>
+
+
+
+
+
+
 
     <!-- this library load from node server -->
     <script src="/socket.io/socket.io.js"></script>
+
     <script>
+
+        // const mongoose = require("../conn.js");
+        //const { UserData } = require("../schema.js");
         var socket = io('/admin');
         //  var message = document.getElementById("message");
         const room = "Live Users";
         var somerow = document.getElementById("somerow");
         var name = document.getElementById("fname").value;
         var email = document.getElementById("email").value;
-
+        var localSocket_id;
+        // let result = UserData.find();
+        //         console.log(result);
 
         //join in room 
         socket.on('connect', () => {       //when client is connect then join room
             console.log("working")
-            socket.emit('join', { room });
-            document.getElementById("socket_id").value = socket.id;
-        })
-
-        socket.on('sendId', () => {
-            console.log("Running....")
-            console.log(name);
-            console.log(email);
 
             let user_details = {
                 client_name: name,
                 client_email: email,
+                room: room,
             };
-            console.log(user_details)
-            socket.emit('new_visitor', user_details);
+            socket.emit('join', user_details);
+            localSocket_id = document.getElementById("socket_id").value = socket.id;
+            console.log("local " + localSocket_id);
         })
+
+
 
 
         socket.on('userInfo', (data) => {
+
+            $("#tbl").empty();
+            //  location.reload(false)
             console.log(data);
-             var tr = document.createElement("tr");         
-             var td1 = tr.appendChild(document.createElement("td"));
-             var td2 = tr.appendChild(document.createElement("td"));
-             var td3 = tr.appendChild(document.createElement("td"));
-            // const cellText = document.createTextNode();
+            for (let i = 0; i < data.length; i++) {
+                if (localSocket_id != data[i].socketId && email != data[i].emailId) {
+                    var tr = document.createElement("tr");
+                    console.log('Runinig........')
+                    var td1 = tr.appendChild(document.createElement("td"));
+                    var td2 = tr.appendChild(document.createElement("td"));
+                    var td3 = tr.appendChild(document.createElement("td"));
+                    // const cellText = document.createTextNode();
 
-            td1.innerHTML=data.name
-            td2.innerHTML=data.email
-            td3.innerHTML=data.socketId
+                    console.log(data[i].name);
+                    console.log(data[i].emailId);
 
-            document.getElementById("tbl").appendChild(tr);
-            
+                    console.log(data[i].socketId);
+                    td1.innerHTML = data[i].name
+                    let email = data[i].emailId;
+                    td2.innerHTML = '<a href="/showdata?name=' + email + '">' + email + '</a>';
+                    td3.innerHTML = data[i].socketId
+
+                    document.getElementById("tbl").appendChild(tr);
+                }
+            }
         })
 
+        // window.addEventListener('#tbl',()=>{
+        //     event.preventDefault();
+        //     event.returnValue="";
+        // })
 
-        socket.on('visitors', (visitors) => {
+        //         window.onbeforeunload = function() {
+        //     return "Dude, are you sure you want to leave? Think of the kittens!";
+        // }
+
+        window.onload = (event) => {
+            console.log('page is fully loaded');
+        };
 
 
-        })
 
     </script>
 </body>
