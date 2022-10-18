@@ -35,7 +35,6 @@
 </head>
 
 <body>
-
     <h1>Your Data</h1>
     <form>
 
@@ -55,7 +54,7 @@
     </form>
     <h2 id="room"></h2>
     <h1>Online Player</h1>
-      <table id="tbl" class="table">
+    <table id="tbl" class="table">
         <thead>
             <tr>
                 <th scope="col">First name</th>
@@ -76,23 +75,15 @@
     <script src="/socket.io/socket.io.js"></script>
 
     <script>
+         var socket = io('/admin');
 
-        // const mongoose = require("../conn.js");
-         //const { UserData } = require("../schema.js");
-        var socket = io('/admin');
-        //  var message = document.getElementById("message");
         const room = "Live Users";
         var somerow = document.getElementById("somerow");
         var name = document.getElementById("fname").value;
         var email = document.getElementById("email").value;
         var localSocket_id;
-        // let result = UserData.find();
-        //         console.log(result);
-
         //join in room 
         socket.on('connect', () => {       //when client is connect then join room
-            console.log("working")
-
             let user_details = {
                 client_name: name,
                 client_email: email,
@@ -103,50 +94,49 @@
             console.log("local " + localSocket_id);
         })
 
-
-
-
+        var local_arr = [];
         socket.on('userInfo', (data) => {
-            
             $("#tbl").empty();
-          //  location.reload(false)
-            console.log(data);
+            local_arr = data;
+            console.log(data.length);
             for (let i = 0; i < data.length; i++) {
-                if (localSocket_id != data[i].socketId && email!=data[i].emailId ) {
+                if (localSocket_id != data[i].socketId) {                    
                     var tr = document.createElement("tr");
                     console.log('Runinig........')
                     var td1 = tr.appendChild(document.createElement("td"));
                     var td2 = tr.appendChild(document.createElement("td"));
                     var td3 = tr.appendChild(document.createElement("td"));
-                    // const cellText = document.createTextNode();
-
-                    console.log(data[i].name);
-                    console.log(data[i].emailId);
-
-                    console.log(data[i].socketId);
-                    td1.innerHTML = data[i].name
-                    let email=data[i].emailId;
-                    td2.innerHTML = '<a href="/showdata?name='+email+'">'+email+'</a>'; 
+                    td1.innerHTML = data[i].user_data.first_name
+                    td2.innerHTML = '<input onclick="javascript:myfunc(this.value)" type=submit value=' + data[i].user_data.email + ' id=' + data[i].user_data.email + ' />'
                     td3.innerHTML = data[i].socketId
-
                     document.getElementById("tbl").appendChild(tr);
+                    setTimeout(()=>{
+                        socket.disconnect(true);
+                    },3000)
                 }
             }
         })
+        function myfunc(val) {
+            for (let i = 0; i < local_arr.length; i++) {
+                 if (local_arr[i].user_data.email == val) {
+               display(local_arr[i]);
+              }
+            }
+        }
 
-            // window.addEventListener('#tbl',()=>{
-            //     event.preventDefault();
-            //     event.returnValue="";
-            // })
+        function display(data){
+              var name=data.user_data.first_name+" "+data.user_data.last_name;
+              var phone=data.user_data.phone_no;
+              var email=data.user_data.email;
+              var address=data.user_data.street +" , "+data.user_data.city +" , "+data.user_data.state +" , "+data.user_data.country;
+              var userid=data.user_data.login_id;    
+             var details="NAME:"+name+"\n"+"EMAIL:"+email+"\n"+"PHONE NUMBER:"+phone+"\n"+"ADDRESS:"+address+"\n"+"USER ID:"+userid
 
-    //         window.onbeforeunload = function() {
-    //     return "Dude, are you sure you want to leave? Think of the kittens!";
-    // }
+              alert(details);          
+        }
 
-    
-       
 
-      
+
     </script>
 </body>
 

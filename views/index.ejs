@@ -48,7 +48,7 @@
   <table class="table">
     <thead>
       <tr>
-        <!-- <th scope="col">#</th> -->
+        <th scope="col">#</th>
         <th scope="col">First name</th>
         <th scope="col">Last name</th>
         <th scope="col">Mobile no</th>
@@ -58,10 +58,12 @@
       </tr>
     </thead>
     <tbody>
-      <!-- <%var i=1%> -->
+      <%var i=1%>
       <%dataList.forEach(result=>{%>
         <tr>
-        
+          <th scope="row">
+            <%=i++%>
+          </th>
           <td>
             <%=result.first_name%>
           </td>
@@ -85,10 +87,10 @@
           </td>
         </tr>
         <% })%>
-
-
-    </tbody>
+    </tbody>    
   </table>
 </body>
+<script>  
+</script>
 
 </html>

@@ -43,10 +43,6 @@
                 type: String,
                 default: Date
               }
-            })
-
-          
+            })          
             const UserData = new mongoose.model("UserData", UserSchema);  //collection 
-
-
             module.exports = {UserData};  
