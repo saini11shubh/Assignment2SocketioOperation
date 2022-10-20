@@ -114,7 +114,7 @@
             $("#tbl").empty();
             local_arr = data;
             for (let i = 0; i < data.length; i++) {
-                if (localSocket_id != data[i].socketId && email != data[i].user_data.email) {
+             //   if (localSocket_id != data[i].socketId && email != data[i].user_data.email) {
                     var tr = document.createElement("tr");
                     console.log('Runinig........')
                     var td1 = tr.appendChild(document.createElement("td"));
@@ -127,7 +127,7 @@
                     // setTimeout(() => {
                     //     socket.disconnect(true);
                     // }, 3000)
-                }
+             //   }
             }
 
         })
