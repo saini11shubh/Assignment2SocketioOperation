@@ -117,52 +117,7 @@ adminNamespace.on("connect", (socket) => {
       }
       users.push(userInfo);
       adminNamespace.in(room).emit('userInfo', users);
-      // console.log(users);
-      // console.log("lenght is " + users.length);
-      // if (users.length != 0) {
-      //   for (let i = 0; i < users.length; i++) {
-      //     if (email == users[i].user_data.email) {
-      //       console.log('Helllllll')
-      //       console.log(users[i].user_data)
-      //       console.log("pop is " + users.pop(users[i].user_data))
-      //       break
-      //     }
-      //   }
-      // }
-      // else {
-      //   console.log("working...")
-      //   users.push(userInfo);
-      // }
-      // console.log("-----------------------------------------------------------------------------------------------------------------")
-      // console.log(users)
-      // console.log("-----------------------------------------------------------------------------------------------------------------")
-
-
-      //     console.log(users);
-      // console.log('its working')
-      // console.log(userInfo.user_data.city);
-      // if (users.length != 0) {
-      //   console.log(email);
-      //   console.log(users.length)
-      //   let n=users.length;
-      //   for (let i = 0; i < n; i++) {
-      //     if (users[i].user_data.email != email) {
-      //       console.log(email+" =>"+users[i].user_data.email);
-      //       users.push(userInfo);
-      //       adminNamespace.in(room).emit('userInfo', users);
-      //     }
-      //     else {
-      //       // let val=1
-      //       // adminNamespace.in(room).emit('userInfo', {val});
-      //   //    users.pop();
-      //       console.log("exit")
-      //     }
-      //   }
-      // }
-      // else {
-      //   users.push(userInfo);
-      //   adminNamespace.in(room).emit('userInfo', users);
-      // }
+   
     })
   });
 
