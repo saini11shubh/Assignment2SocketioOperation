@@ -7,7 +7,7 @@ const bodyParser = require('body-parser')
 const app = express()
 const url = require('url');
 
-const port = process.env.PORT || 6547;
+const port = process.env.PORT || 3000;
 
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
@@ -19,6 +19,7 @@ const { UserData } = require("./schema.js");
 const { json } = require('body-parser');
 const { read } = require('fs');
 const { emit } = require('process');
+const e = require('express');
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
@@ -29,7 +30,20 @@ app.get('/', (req, res) => {
 
 
 app.post('/save', async (req, res) => {
-  // console.log(req.body);
+  console.log(req.body.email);
+  UserData.exists({email:req.body.email},(err, doc)=>{
+    if (err){
+        console.log(err)
+    }else if(doc!=null){
+       //console.log("Result :", doc) // true
+       let message="Email is already exist and change your email"
+       res.render('room', {errorMessage:message});
+      //  dataList: {'Email is already exist and change your email'}
+   //   })
+     //   return res.status(400).json({ response: 'Email is already exist and change your email' });
+        console.log("its working");
+    }
+});
   if (!validator.isAlpha(req.body.first_name)) {
     return res.status(400).json({ response: 'Invalid first name' });
   }
@@ -44,7 +58,7 @@ app.post('/save', async (req, res) => {
 
   if (!validator.isEmail(req.body.email)) {
     return res.status(400).json({ response: 'Invalid Email' });
-  }
+  } 
 
   if (!validator.isAlpha(req.body.city)) {
     return res.status(400).json({ response: 'Enter valid city' });
@@ -63,6 +77,7 @@ app.post('/save', async (req, res) => {
   if (!validator.isStrongPassword(req.body.password, { minLength: 6, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 })) {
     return res.status(400).json({ response: 'Invalid password' });
   }
+
   const user = {
     name: req.body.first_name,
     email: req.body.email
@@ -95,21 +110,65 @@ adminNamespace.on("connect", (socket) => {
     UserData.findOne({ email: email }, { password: 0, date: 0, _id: 0 }, (err, rst) => {
       if (err) throw err;
       result = rst;
-      console.log(rst)
+      //console.log(rst)
       userInfo = {
         user_data: result,
         socketId: socketId,
       }
-      console.log('its working')
-      console.log(userInfo.user_data.city);
-      users.push(userInfo)
+      users.push(userInfo);
       adminNamespace.in(room).emit('userInfo', users);
+      // console.log(users);
+      // console.log("lenght is " + users.length);
+      // if (users.length != 0) {
+      //   for (let i = 0; i < users.length; i++) {
+      //     if (email == users[i].user_data.email) {
+      //       console.log('Helllllll')
+      //       console.log(users[i].user_data)
+      //       console.log("pop is " + users.pop(users[i].user_data))
+      //       break
+      //     }
+      //   }
+      // }
+      // else {
+      //   console.log("working...")
+      //   users.push(userInfo);
+      // }
+      // console.log("-----------------------------------------------------------------------------------------------------------------")
+      // console.log(users)
+      // console.log("-----------------------------------------------------------------------------------------------------------------")
+
+
+      //     console.log(users);
+      // console.log('its working')
+      // console.log(userInfo.user_data.city);
+      // if (users.length != 0) {
+      //   console.log(email);
+      //   console.log(users.length)
+      //   let n=users.length;
+      //   for (let i = 0; i < n; i++) {
+      //     if (users[i].user_data.email != email) {
+      //       console.log(email+" =>"+users[i].user_data.email);
+      //       users.push(userInfo);
+      //       adminNamespace.in(room).emit('userInfo', users);
+      //     }
+      //     else {
+      //       // let val=1
+      //       // adminNamespace.in(room).emit('userInfo', {val});
+      //   //    users.pop();
+      //       console.log("exit")
+      //     }
+      //   }
+      // }
+      // else {
+      //   users.push(userInfo);
+      //   adminNamespace.in(room).emit('userInfo', users);
+      // }
     })
   });
 
-  socket.on('forceDisconnect', function () {
-    socket.disconnect();
-  });
+  // socket.on('forceDisconnect', function () {
+  //   socket.disconnect();
+  // });
 });
 
 app.get('/view', (req, res) => {

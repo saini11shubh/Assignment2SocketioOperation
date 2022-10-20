@@ -12,7 +12,8 @@
               },
               email: {
                 type: String,
-                unique: true,
+                 unique: true,
+                lowercase:true,
                 required: true
               },
               street: {
