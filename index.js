@@ -18,7 +18,6 @@ const mongoose = require("./conn.js");
 const { UserData } = require("./schema.js");
 const { json } = require('body-parser');
 const { read } = require('fs');
-const { emit } = require('process');
 const e = require('express');
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -31,19 +30,15 @@ app.get('/', (req, res) => {
 
 app.post('/save', async (req, res) => {
   console.log(req.body.email);
-  UserData.exists({email:req.body.email},(err, doc)=>{
-    if (err){
-        console.log(err)
-    }else if(doc!=null){
-       //console.log("Result :", doc) // true
-       let message="Email is already exist and change your email"
-       res.render('room', {errorMessage:message});
-      //  dataList: {'Email is already exist and change your email'}
-   //   })
-     //   return res.status(400).json({ response: 'Email is already exist and change your email' });
-        console.log("its working");
+  await UserData.exists({ email: req.body.email }, (err, rst) => {
+    if (err) {
+      console.log(err)
     }
-});
+    else if (rst != null) {
+    return res.status(400).json({ response: 'Email is already exist and change your email' });
+    }
+
+  });
   if (!validator.isAlpha(req.body.first_name)) {
     return res.status(400).json({ response: 'Invalid first name' });
   }
@@ -58,7 +53,7 @@ app.post('/save', async (req, res) => {
 
   if (!validator.isEmail(req.body.email)) {
     return res.status(400).json({ response: 'Invalid Email' });
-  } 
+  }
 
   if (!validator.isAlpha(req.body.city)) {
     return res.status(400).json({ response: 'Enter valid city' });
@@ -117,7 +112,7 @@ adminNamespace.on("connect", (socket) => {
       }
       users.push(userInfo);
       adminNamespace.in(room).emit('userInfo', users);
-   
+
     })
   });
 
