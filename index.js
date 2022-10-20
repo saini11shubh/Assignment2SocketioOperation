@@ -112,7 +112,6 @@ adminNamespace.on("connect", (socket) => {
       }
       users.push(userInfo);
       adminNamespace.in(room).emit('userInfo', users);
-
     })
   });
 
